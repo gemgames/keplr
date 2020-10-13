@@ -46,7 +46,7 @@ var Keplr = class {
     this.error = console.error;
     this.noop = () => {};
     this.tk = 0;
-    this.toggleAnimate
+    this.toggleAnimate = 1;
     this.CREDITS = "Made by Gem Games (2020)";
 
     //CTX SETUP
@@ -323,7 +323,7 @@ var Keplr = class {
       if (s == 0) {
         r = g = b = l;
       } else {
-        H = function H(p, q, t) {
+        J = function H(p, q, t) {
           if (t < 0) t += 1;
           if (t > 1) t -= 1;
           if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -551,7 +551,7 @@ var Keplr = class {
       requestAnimationFrame(t.animate);
     };
     if(this.toggleAnimate==true){
-    this.animate();
+       this.animate();
     }
   }
 };
