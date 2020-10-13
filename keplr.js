@@ -310,17 +310,18 @@ var Keplr = class {
       let e = p => p.toString(16);
       return "#" + e(r) + e(g) + e(b) + e(a);
     };
-    this.hsl = function(h, S, L) {
-      let s = S / 100,
+    this.hsl = function(H, S, L) {
+      let h = H / 360,
+        s = S / 100,
         l = L / 100,
         r,
         g,
         b,
-        H,
+        J,
         R = this.round;
 
       if (s == 0) {
-        r = g = b = l; // achromatic
+        r = g = b = l;
       } else {
         H = function H(p, q, t) {
           if (t < 0) t += 1;
@@ -333,9 +334,9 @@ var Keplr = class {
         };
         var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         var p = 2 * l - q;
-        r = H(p, q, h + 1 / 3);
-        g = H(p, q, h);
-        b = H(p, q, h - 1 / 3);
+        r = J(p, q, h + 1 / 3);
+        g = J(p, q, h);
+        b = J(p, q, h - 1 / 3);
       }
       
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
@@ -343,9 +344,10 @@ var Keplr = class {
     this.hsla = function(h, s, l, a) {
       return "#" + this.hsl(h, s, l) + (a * 255).toString(16);
     };
-    this.hsv = this.hsb = function(h, S, V) {
+    this.hsv = this.hsb = function(H, S, V) {
       var r, g, b, i, f, p, q, t;
-      var s = S / 100,
+      var h = H/360,
+        s = S / 100,
         v = V / 100,
         R = this.round;
       if (arguments.length === 1) {
