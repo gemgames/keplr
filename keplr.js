@@ -336,9 +336,6 @@ var Keplr = class {
         g = H(p, q, h);
         b = H(p, q, h - 1 / 3);
       }
-      this.log(R(r * 255));
-      this.log(R(g * 255));
-      this.log(R(b * 255));
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
     };
     this.hsla = function(h, s, l, a) {
