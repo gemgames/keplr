@@ -46,6 +46,7 @@ var Keplr = class {
     this.error = console.error;
     this.noop = () => {};
     this.tk = 0;
+    this.toggleAnimate
     this.CREDITS = "Made by Gem Games (2020)";
 
     //CTX SETUP
@@ -54,7 +55,7 @@ var Keplr = class {
     this.ctx.fillStyle = "#ffffff";
 
     this.FunctionNames =
-      "ctx,element,setup,draw,log,warn,error,noop,tk," +
+      "ctx,element,setup,draw,log,warn,error,noop,tk,toggleAnimate" +
       "EULER,pi,tau,round,power,sqrt,abs,ceil,floor,min,max,squ,random,randInt,dist,mag,norm,map,lerp," +
       "angleMode,angleModeisDeg,deg,rad,sin,cos,tan,asin,acos,atan," +
       "rotateAngle,translate,scale,rotate,rotateShape,undoRotateShape," +
@@ -336,6 +337,7 @@ var Keplr = class {
         g = H(p, q, h);
         b = H(p, q, h - 1 / 3);
       }
+      
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
     };
     this.hsla = function(h, s, l, a) {
@@ -546,6 +548,8 @@ var Keplr = class {
       t.tk++;
       requestAnimationFrame(t.animate);
     };
+    if(this.toggleAnimate==true){
     this.animate();
+    }
   }
 };
