@@ -1,0 +1,35 @@
+<canvas class="keplr-canvas" width="600" height="400"></canvas>
+<script src="keplr.js"></script>
+<script>
+  let canvas = new Keplr(".keplr-canvas");
+
+  canvas.setup = function() {
+    canvas.embed(`
+<loadImage green,"https://cdn.glitch.com/5fdebad7-24c4-4706-827d-5b10e5888d64%2Fresize.png?v=1602823367081">
+<loadImage blue,"https://cdn.glitch.com/5fdebad7-24c4-4706-827d-5b10e5888d64%2Fresized.png?v=1602821034116">
+`);
+  };
+
+  canvas.draw = function() {
+    canvas.embed(`
+<background white strokeWidth=2>
+<circle 50,50,50 fill=#FF0000 stroke=#BB0000>
+<rect 125,25,50,50 fill=#FF8800 stroke=#BB6600>
+<ellipse 250,50,75,50 fill=#FFFF00 stroke=#BBBB00 rotate=45>
+<line 325,25,375,75 stroke=#00BB00>
+<triangle 425,25,475,25,425,75 fill=#0000FF stroke=#0000BB>
+<quad 525,25,525,75,545,45,575,25 fill=#FF00FF stroke=#BB00BB>
+<point 50,150 fill=#FF0000 stroke=#BB0000 strokeWidth=15>
+<bezier 125,125,175,125,175,175,125,175 fill=#FF8800 stroke=BB6600 strokeWidth=2>
+<quadBezier 225,125,275,125,275,175 fill=#FFFF00 stroke=#BBBB00>
+<image green,325,125>
+<image blue,425,125>
+<path "M562.976 126.090c-5.745 0-10.689 4.673-12.98 9.554-2.292-4.881-7.237-9.554-12.982-9.554-7.92 0-14.348 6.429-14.348 14.35 0 16.111 16.253 20.336 27.331 36.265 10.47-15.831 27.328-20.668 27.328-36.265 0-7.921-6.428-14.35-14.348-14.35" fill=#FF00FF stroke=#BB00BB>
+<fill black>
+  <text Aa,125,250 font=Verdana,40>
+  <text Aa,225,250 font=Serif,40>
+  <text Aa,325,250 font="Courier New",40>
+  <text Aa,425,250 font=Arial,40>
+`);
+  };
+</script>
