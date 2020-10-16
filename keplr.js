@@ -37,32 +37,39 @@ String.prototype.replaceAll = function(a, b) {
 
 var Keplr = class {
   constructor(canvas) {
+    //SYSTEM    element,ctx,log,warn,error,noop,tk,toogleAnimate
     this.element = document.querySelector(canvas);
     if (this.element == null) throw new Error("Query Selector returned null.");
-
     this.ctx = this.element.getContext("2d");
     this.log = console.log;
     this.warn = console.warn;
     this.error = console.error;
     this.noop = () => {};
     this.tk = 0;
+    this.tab = String.fromCharCode(9);
     this.toggleAnimate = 1;
+
     this.CREDITS = "Made by Gem Games (2020)";
 
     //CTX SETUP
     this.ctx.lineJoin = "round";
     this.ctx.lineWidth = 2;
     this.ctx.fillStyle = "#ffffff";
+    this.ctx.strokeStyle = "black";
 
     this.FunctionNames =
-      "ctx,element,setup,draw,log,warn,error,noop,tk,toggleAnimate" +
+      "element,ctx,log,warn,error,noop,tk,tab,toggleAnimate," +
       "EULER,pi,tau,round,power,sqrt,abs,ceil,floor,min,max,squ,random,randInt,dist,mag,norm,map,lerp," +
       "angleMode,angleModeisDeg,deg,rad,sin,cos,tan,asin,acos,atan," +
       "rotateAngle,translate,scale,rotate,rotateShape,undoRotateShape," +
-      "fillStyle,strokeStyle,width,height,beginPath,closePath,rect,circle,ellipse,line,triangle,quad,point,bezier,quadBezier,image,background,fill,noFill,stroke,noStroke,strokeWidth,likeWidth,strokeJoin,lineJoin," +
+      "fillStyle,strokeStyle,lineWidth,width,height,beginPath,fillPath,closePath,drawPath,rect,circle,ellipse,line,triangle,quad,point,bezier,quadBezier,background,fill,noFill,stroke,noStroke,strokeWidth,likeWidth,strokeJoin,lineJoin," +
+      "image,images,loadImage," +
       "linearGradient,radialGradient,rgb,rgba,hsl,hsla,hsv,hsva,hsb,hsba,lerpColor," +
       "day,month,year,hour,minute,second,millis," +
-      "CREDITS";
+      "keyPressed,keyReleased,keyTyped,keyMatch,matchKeys," +
+      "mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut," +
+      "runFunction,embedPack,embed," +
+      "CREDITS".split(",");
 
     //MATH    EULER,pi,tau,round,power,sqrt,abs,ceil,floor,min,max,squ,random,randInt,dist,mag,norm,map,lerp,
     this.EULER = Math.E;
@@ -130,7 +137,7 @@ var Keplr = class {
       this.ctx.scale(x, y);
     };
     this.rotate = function(deg) {
-      this.rotateAngle = this.angleModeIsDeg ? this.deg(deg) : deg;
+      this.rotateAngle = this.angleModeisDeg() ? this.deg(deg) : deg;
     };
     this.rotateShape = function(x, y) {
       if (this.rotateAngle == 0) return;
@@ -141,34 +148,69 @@ var Keplr = class {
     this.undoRotateShape = function(x, y) {
       if (this.rotateAngle == 0) return;
       this.ctx.translate(x, y);
-      this.ctx.rotate(this.rotateAngle);
+      this.ctx.rotate(-this.rotateAngle);
       this.ctx.translate(-x, -y);
     };
 
-    //CANVAS CTX    fillStyle,strokeStyle,width,height,beginPath,closePath,rect,circle,ellipse,line,triangle,quad,point,bezier,quadBezier,image,background,fill,noFill,stroke,noStroke,strokeWidth,likeWidth,strokeJoin,lineJoin
+    //CANVAS CTX    fillStyle,strokeStyle,lineWidth,width,height,beginPath,fillPath,closePath,drawPath,rect,circle,ellipse,line,triangle,quad,point,bezier,quadBezier,background,fill,noFill,stroke,noStroke,strokeWidth,likeWidth,strokeJoin,lineJoin
     this.fillStyle = "#ffffff";
-    this.strokeStyle = "#000000";
+    this.strokeStyle = "black";
+    this.lineWidth = 2;
     this.width = this.element.offsetWidth;
     this.height = this.element.offsetHeight;
     this.beginPath = function(x, y) {
       this.rotateShape(x, y);
       this.ctx.beginPath();
     };
-    this.closePath = function(x, y) {
+    this.fillPath = function() {
       if (this.fillStyle !== false) {
         this.ctx.fill();
-        this.ctx.stroke();
       } else {
+        this.ctx.stroke();
+      }
+      this.ctx.beginPath();
+    };
+    this.closePath = function(x, y) {
+      if (this.fillStyle !== false) {
         this.ctx.stroke();
       }
       this.undoRotateShape(x, y);
       this.rotateAngle = 0;
+    };
+    this.drawPath = {
+      circle: (x, y, s) => {
+        this.ctx.arc(x, y, s / 2, 0, 2 * this.pi);
+      },
+      ellipse: (x, y, w, h) => {
+        this.ctx.moveTo(x + w / 2, y);
+        this.ctx.ellipse(x, y, w / 2, h / 2, 0, 0, this.tau);
+      },
+      line: (x1, y1, x2, y2) => {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+      },
+      triangle: (x1, y1, x2, y2, x3, y3) => {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.lineTo(x3, y3);
+        this.ctx.lineTo(x1, y1);
+        this.ctx.closePath();
+      },
+      quad: (x1, y1, x2, y2, x3, y3, x4, y4) => {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.lineTo(x2, y2);
+        this.ctx.lineTo(x3, y3);
+        this.ctx.lineTo(x4, y4);
+        this.ctx.lineTo(x1, y1);
+        this.ctx.closePath();
+      }
     };
     this.rect = function(x, y, w, h) {
       this.rotateShape(x + w, y + h);
 
       if (this.fillStyle !== false) {
         this.ctx.fillRect(x, y, w, h);
+        this.ctx.strokeRect(x, y, w, h);
       } else {
         this.ctx.strokeRect(x, y, w, h);
       }
@@ -177,31 +219,34 @@ var Keplr = class {
     };
     this.circle = function(x, y, s) {
       this.beginPath(x, y);
-      this.ctx.arc(x, y, s / 2, 0, 2 * this.pi);
+      this.drawPath.circle(x, y, s);
+      this.fillPath();
+      this.drawPath.circle(x, y, s);
       this.closePath(x, y);
     };
     this.ellipse = function(x, y, w, h) {
-      this.beginPath(x + w / 2, y + h / 2);
-      this.ctx.moveTo(x + w / 2, y);
-      this.ctx.ellipse(x, y, w / 2, h / 2, 0, 0, this.tau);
-      this.closePath(x + w / 2, y + h / 2);
+      this.beginPath(x, y);
+      this.drawPath.ellipse(x, y, w, h);
+      this.fillPath();
+      this.drawPath.ellipse(x, y, w, h);
+      this.closePath(x, y);
     };
     this.line = function(x1, y1, x2, y2) {
       let x = this.lerp(x1, x2, 0.5);
       let y = this.lerp(y1, y2, 0.5);
       this.beginPath(x, y);
-      this.ctx.moveTo(x1, y1);
-      this.ctx.lineTo(x2, y2);
+      this.drawPath.line(x1, y1, x2, y2);
+      this.fillPath();
+      this.drawPath.line(x1, y1, x2, y2);
       this.closePath(x, y);
     };
     this.triangle = function(x1, y1, x2, y2, x3, y3) {
       let x = this.lerp(this.min(x1, x2, x3), this.max(x1, x2, x3), 0.5);
       let y = this.lerp(this.min(y1, y2, y3), this.max(y1, y2, y3), 0.5);
       this.beginPath(x, y);
-      this.ctx.moveTo(x1, y1);
-      this.ctx.lineTo(x2, y2);
-      this.ctx.lineTo(x3, y3);
-      this.ctx.lineTo(x1, y1);
+      this.drawPath.triangle(x1, y1, x2, y2, x3, y3);
+      this.fillPath();
+      this.drawPath.triangle(x1, y1, x2, y2, x3, y3);
       this.closePath(x, y);
     };
     this.quad = function(x1, y1, x2, y2, x3, y3, x4, y4) {
@@ -216,44 +261,49 @@ var Keplr = class {
         0.5
       );
       this.beginPath(x, y);
-      this.ctx.moveTo(x1, y1);
-      this.ctx.lineTo(x2, y2);
-      this.ctx.lineTo(x3, y3);
-      this.ctx.lineTo(x4, y4);
-      this.ctx.lineTo(x1, y1);
+      this.drawPath.quad(x1, y1, x2, y2, x3, y3, x4, y4);
+      this.fillPath();
+      this.drawPath.quad(x1, y1, x2, y2, x3, y3, x4, y4);
       this.closePath(x, y);
     };
     this.point = function(x, y) {
-      this.beginPath(x, y);
-      this.ctx.moveTo(x, y);
-      this.closePath(x, y);
+      this.ctx.lineWidth = 0;
+      this.circle(x, y, this.lineWidth);
+      this.ctx.lineWidth = this.lineWidth;
     };
     this.bezier = function(x1, y1, cx1, cy1, cx2, cy2, x2, y2) {
+      let a = b => {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.bezierCurveTo(cx1, cy1, cx2, cy2, x2, y2);
+      };
       this.beginPath(x1, y1);
-      this.ctx.moveTo(x1, y1);
-      this.ctx.bezierCurveTo(cx1, cy1, cx2, cy2, x2, y2);
+      a();
+      this.fillPath();
+      a();
       this.closePath(x1, y1);
     };
     this.quadBezier = function(x1, y1, cx, cy, x2, y2) {
+      let a = b => {
+        this.ctx.moveTo(x1, y1);
+        this.ctx.quadraticCurveTo(cx, cy, x2, y2);
+      };
       this.beginPath(x1, y1);
-      this.ctx.moveTo(x1, y1);
-      this.ctx.quadraticCurveTo(cx, cy, x2, y2);
+      a();
+      this.fillPath();
+      a();
       this.closePath(x1, y1);
     };
-    this.image = function(src, x, y) {
-      let img = document.createElement("IMG");
-      img.src = src;
-      document.body.appendChild(img);
-      let X = x + img.offsetWidth / 2;
-      let Y = y + img.offsetHeight / 2;
-      this.rotateShape(X, Y);
-      this.ctx.drawImage(img, x, y);
-      this.undoRotateShape(X, Y);
+    this.path = function(d) {
+      let D = new Path2D(d);
+      if (this.fillStyle !== false) this.ctx.fill(D);
+      this.ctx.stroke(D);
     };
     this.background = function(col) {
       this.ctx.fillStyle = col;
-      this.ctx.fillRect(0, 0, this.width, this.height);
+      this.ctx.strokeStyle = col;
+      this.rect(0, 0, this.width, this.height);
       this.ctx.fillStyle = this.fillStyle;
+      this.ctx.strokeStyle = this.strokeStyle;
     };
     this.fill = function(col) {
       this.ctx.fillStyle = this.fillStyle = col;
@@ -262,13 +312,13 @@ var Keplr = class {
       this.fillStyle = false;
     };
     this.stroke = function(col) {
-      this.strokeStyle = col;
+      this.ctx.strokeStyle = this.strokeStyle = col;
     };
     this.noStroke = function() {
-      this.strokeStyle = false;
+      this.ctx.strokeStyle = false;
     };
     this.strokeWidth = this.strokeWeight = this.lineWidth = function(width) {
-      this.ctx.lineWidth = width;
+      this.ctx.lineWidth = this.lineWidth = width;
     };
     this.strokeJoin = this.lineJoin = function(mode) {
       switch (mode.toLowerCase()) {
@@ -285,6 +335,23 @@ var Keplr = class {
           this.ctx.lineJoin = "round";
           break;
       }
+    };
+
+    //IMAGES    image,images,loadImage
+    this.images = {};
+    this.loadImage = function(name, src) {
+      this.images[name] = new Image();
+      this.images[name].src = src;
+    };
+    this.image = function(name, x, y) {
+      let img = this.images[name];
+      if (this.images[name] == [][0])
+        throw new Error("Image name not set. Use .loadImage in setup.");
+      let X = x + img.offsetWidth / 2;
+      let Y = y + img.offsetHeight / 2;
+      this.rotateShape(X, Y);
+      this.ctx.drawImage(img, x, y);
+      this.undoRotateShape(X, Y);
     };
 
     //COLORS    linearGradient,radialGradient,rgb,rgba,hsl,hsla,hsv,hsva,hsb,hsba,lerpColor,
@@ -338,7 +405,7 @@ var Keplr = class {
         g = J(p, q, h);
         b = J(p, q, h - 1 / 3);
       }
-      
+
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
     };
     this.hsla = function(h, s, l, a) {
@@ -346,7 +413,7 @@ var Keplr = class {
     };
     this.hsv = this.hsb = function(H, S, V) {
       var r, g, b, i, f, p, q, t;
-      var h = H/360,
+      var h = H / 360,
         s = S / 100,
         v = V / 100,
         R = this.round;
@@ -395,7 +462,7 @@ var Keplr = class {
       }
     };
 
-    //TEXT
+    //TEXT    font,textAlign,text,textWidth
     this.font = function(font, size) {
       this.ctx.font = `${size || 20}px ${font}`;
     };
@@ -418,7 +485,7 @@ var Keplr = class {
     this.second = a => new Date().getSeconds();
     this.millis = a => this.loadTime - new Date().getTime();
 
-    //KEY    keyPressed,keyReleased,keyTyped,keyMatch,matchKeys
+    //KEY    keyPressed,keyReleased,keyTyped,keyMatch,matchKeys,
     this.keyPressed = () => {};
     this.keyReleased = () => {};
     this.keyTyped = () => {};
@@ -431,7 +498,7 @@ var Keplr = class {
       );
     };
 
-    //MOUSE    mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut
+    //MOUSE    mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut,
     this.mouseClicked = () => {};
     this.mousePressed = () => {};
     this.mouseReleased = () => {};
@@ -439,12 +506,15 @@ var Keplr = class {
     this.mouseOver = () => {};
     this.mouseOut = () => {};
 
-    //EMBED    runFunction,embed,
+    //EMBED    runFunction,embedPack,embed,
     this.runFunction = function(a) {
       let b = [],
         c = [],
         d,
-        e = a[1].split(",");
+        e = a[1]
+          .replaceAll(this.tab, " ")
+          .replaceAll("⩶", "=")
+          .split(",");
       a.forEach(n => {
         if (n.includes("=")) {
           b.push(n.split("=")[0]);
@@ -455,12 +525,34 @@ var Keplr = class {
         d = c[i].split(",");
         this[n](d[0], d[1], d[2], d[3], d[4], d[5], d[6], d[7]);
       });
-      e = e.map(n => (n * 1 == n ? n * 1 : n));
+      e = e.map(n => (n * 1 == n ? n * 1 : n.replaceAll("≖", ",")));
       this[a[0]](e[0], e[1], e[2], e[3], e[4], e[5], e[6], e[7]);
     };
+    this.embedPack = function(p) {
+      let e = "",
+        a,
+        m = 0,
+        i;
+      for (i = 0; i < p.length; i++) {
+        a = p[i];
+        if (m == 0) {
+          if (a == '"') {
+            m++;
+          } else {
+            e += a;
+          }
+        } else {
+          if (a == '"') {
+            m = 0;
+          } else {
+            e += a == " " ? this.tab : a == "=" ? "⩶" : a == "," ? "≖" : a;
+          }
+        }
+      }
+      return e;
+    };
     this.embed = function(p) {
-      let data = p
-          .replaceAll(`  `, "")
+      let data = this.embedPack(p.replaceAll(this.tab, ""))
           .replaceAll("\n", " ")
           .replaceAll("<", "< ")
           .replaceAll(">", " >")
@@ -483,7 +575,9 @@ var Keplr = class {
     };
   }
   set setup(x) {
-    x();
+    document.addEventListener("load", function(event) {
+      x();
+    });
   }
   set draw(x) {
     let t = this;
@@ -540,18 +634,16 @@ var Keplr = class {
       t.keyCode = event.keyCode;
       t.keyTyped(event);
     });
-
     document.addEventListener("load", function(event) {
       t.loadTime = new Date().getTime();
-      t.setup();
     });
     this.animate = function() {
       x();
       t.tk++;
       requestAnimationFrame(t.animate);
     };
-    if(this.toggleAnimate==true){
-       this.animate();
+    if (this.toggleAnimate == true) {
+      this.animate();
     }
   }
 };
