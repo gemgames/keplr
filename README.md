@@ -233,8 +233,6 @@ let canvas = new Keplr(".keplr-canvas");
 | `lineWidth` | Number | The width of the outlines in future elements (Use `strokeWidth()` or `lineWidth()` to change)
 | `width` | Number | The width of the canvas element
 | `height` | Number | The height of the canvas element
-| `` |  | 
-
 
 | **Methods** | Types | returns | Description |
 | --- | --- | --- | --- |
@@ -245,23 +243,77 @@ let canvas = new Keplr(".keplr-canvas");
 | `triangle(x1,y1,x2,y2,x3,y3)` | Number x6 |  | Draws a triangle on the canvas at coordinates.
 | `quad(x1,y1,x2,y2,x3,y3,x4,y4)` | Number x8 |  | Draws a quadrilateral on the canvas at coordinates.
 | `point(x,y)` | Number, Number |  | Draws a point on the canvas at coordinate `(x,y)`.
-| `` |  |  | 
+| `bezier(x1,y1,cx1,cy1,cx2,cy2,x2,y2)` | Number x8 |  | Draws a bezier starting at `(x1,y1)` ending at `(x2,y2)` with control points `(cx1,cy1), (cx2,cy2)`.
+| `quadBezier(x1,y1,cx,cy,x2,y2)` | Number x6 |  | Draws a quadratic bezier starting at `(x1,y1)` ending at `(x2,y2)` with a control point `(cx,cy)`.
+| `path(d)` | String |  | Draws a path using (SVG Path)[https://www.w3schools.com/graphics/svg_path.asp] Notation.
+| `background(col)` | String |  | Wipes the canvas clean with the color `col`.
+| `fill(col)` | String |  | Fills future shapes with color `col`.
+| `noFill()` | String |  | Future shapes will have a transparent fill area.
+| `stroke(col)` | String |  | Fills future shape outlines with color `col`.
+| `noStroke(col)` | String |  | Future shapes will not have an outline.
+| `strokeWidth(n)` OR `strokeWeight(n)` OR `lineWidth(n)` | Number |  | Future shapes will have a outline with width `n`.
+| `strokeJoin(mode)` OR `lineJoin(mode)` | String |  | Changes the mode on how lines look bent. `mode` can be "bevel", "round", or "miter". Defaults to "round".
 
-
-
-### 
+### Images
 
 | **Properties** | Type | Description
 | --- | --- | --- |
-| `` |  | 
-| `` |  | 
-| `` |  | 
-| `` |  | 
-
+| `images` | Object | An object filled with the loaded images
 
 | **Methods** | Types | returns | Description |
 | --- | --- | --- | --- |
-| `` |  |  | 
-| `` |  |  | 
-| `` |  |  | 
-| `` |  |  | 
+| `loadImage(name, src)` | String, String |  | Used in setup. Loads an image into `.images` with the nickname `name`.
+| `image(name, x,y)` | String, Number, Number |  | Draws an the name of the image on screen at given coordinates
+
+### COLORS
+
+| **Methods** | Types | returns | Description |
+| --- | --- | --- | --- |
+| `linearGradient(x1,y1,x2,y2,colors)` | Number x4, Array of Arrays |  | Creates a linear gradient in (CanvasGradient)[https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient] form moving from `(x1,y1)` to `(x2,y2)`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
+| `radialGradient(x,y,r0,r1,colors)` | Number x4, Array of Arrays |  | Creates a radial gradient in (CanvasGradient)[https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient] form at coordinate `(x,y)` with a starting radius `r0` and ending radius `r1`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
+| `rgb(r,g,b)` | Number x3 | String | Makes a color in RGB form. `r`, `g`, and `b` are out of 255.
+| `rgba(r,g,b,a)` | Number x4 | String | Makes a color in RGBA form. `r`, `g`, `b`, and `a` are out of 255.
+| `hsl(h,s,l)` | Number x3 | String | Makes a color in HSL form. `h` is out of 360. `s` and `l` are out of 100.
+| `hsla(h,s,l,a)` | Number x4 | String | Makes a color in HSLA form. `h` is out of 360. `s` and `l` are out of 100. `a` is out of 1.
+| `hsv(h,s,v)` OR `hsb(h,s,b)` | Number x3 | String | Makes a color in HSV / HSB form. `h` is out of 360. `s` and `v` or `b` are out of 100.
+| `hsva(h,s,v)` OR `hsba(h,s,b)` | Number x4 | String | Makes a color in HSVA / HSBA form. `h` is out of 360. `s` and `v` or `b` are out of 100. `a` is out of 1.
+
+### TEXT
+
+| **Methods** | Types | returns | Description |
+| --- | --- | --- | --- |
+| `font(font,size)` | String, Number |  | Sets the font for future text elements.
+| `textAlign(align)` | String |  | Sets the alignment for future text elements. Options: "start", "end", "left", "center", "right", 
+| `text(str,x,y)` | String, Number, Number |  | Draws Text on the canvas.
+| `textWidth(str)` | String | Number | Returns the width of measured text by string.
+
+### Time
+
+| **Methods** | Types | returns | Description |
+| --- | --- | --- | --- |
+| `day()` |  | Number | Returns the date.
+| `month()` |  | Number | Returns the month
+| `year()` |  | Number | Returns the year
+| `hour()` |  | Number | Returns the hour
+| `minute()` |  | Number | Returns the minutes (out of 60)
+| `second()` |  | Number | Returns the seconds
+| `millis()` |  | Number | Returns the amount of milliseconds
+
+### KEYBOARD
+
+| **Properties** | Types  | Description |
+| --- | --- | --- |
+| `keyPressed` | Function | Called when a key is pressed
+| `keyTyped` | Function | Called when a key is typed
+| `keyReleased` | Function | Called when a key is released
+
+### MOUSE
+
+| **Properties** | Types  | Description |
+| --- | --- | --- |
+| `mouseClicked` | Function | Called when the mouse is clicked.
+| `mousePressed` | Function | Called when the mouse is pressed.
+| `mouseReleased` | Function | Called when the mouse is released.
+| `mouseMoved` | Function | Called when the mouse is moved.
+| `mouseOver` | Function | Called when the mouse is over the canvas.
+| `mouseOut` | Function | Called when the mouse is out of the canvas.
