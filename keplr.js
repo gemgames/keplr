@@ -11,15 +11,6 @@ Array.prototype.equals = function(array) {
   }
   return true;
 };
-Array.prototype.contains = function(obj) {
-  var i = this.length;
-  while (i--) {
-    if (this[i].equals(obj)) {
-      return true;
-    }
-  }
-  return false;
-};
 Array.prototype.last = function(a) {
   return this[this.length - (a == undefined ? 1 : a)];
 };
