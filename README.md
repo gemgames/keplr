@@ -328,4 +328,8 @@ let canvas = new Keplr(".keplr-canvas");
 | Keplr Embed | JS Equivalent |
 | --- | --- |
 | `<rect 0,0,100,100>` | rect(0,0,100,100); |
-| `<rect 0,0,100,100`
+| `<rect 0,0,100,100 fill="#FF0000">` | fill("#FF0000"); rect(0,0,100,100); |
+| `<image "dog",100,100>` | image("dog",100,100);
+| `<text "Hello World!",100,100 font="Arial",20 fill="blue">` | fill("blue"); font("Arial",20); text("Hello World!",100,100);
+
+## Feel free to make pull requests!
