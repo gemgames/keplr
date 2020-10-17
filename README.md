@@ -6,7 +6,7 @@ Simple ProcessingJS-like canvas editor
 Link Directly to this repository
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/gemgames/keplr/keplr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gemgames/keplr@1.0/keplr.min.js"></script>
 ```
 
 ## Demo
@@ -21,7 +21,7 @@ Keplr is rendered on a canvas. Set width and height using the parameters below.
 Add the keplr.min.js file to your page. 
 
 ```HTML
-<script src="https://cdn.jsdelivr.net/gh/gemgames/keplr/keplr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gemgames/keplr@1.0/keplr.min.js"></script>
 ```
 The rest will be added in a `<script>` tag.
 ```HTML
