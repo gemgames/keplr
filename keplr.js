@@ -48,6 +48,10 @@ var Keplr = class {
     this.tk = 0;
     this.tab = String.fromCharCode(9);
     this.toggleAnimate = 1;
+    this.lastTarget = null;
+    this.checkTarget = function() {
+      return this.lastTarget.outerHTML.substring(1, 6) != "input";
+    };
 
     this.CREDITS = "Made by Gem Games (2020)";
 
@@ -56,9 +60,10 @@ var Keplr = class {
     this.ctx.lineWidth = 2;
     this.ctx.fillStyle = "#ffffff";
     this.ctx.strokeStyle = "black";
+    this.ctx.font = "20px Arial";
 
     this.FunctionNames =
-      "element,ctx,log,warn,error,noop,tk,tab,toggleAnimate," +
+      "element,ctx,log,warn,error,noop,tk,tab,toggleAnimate,lastTarget,checkTarget" +
       "EULER,pi,tau,round,power,sqrt,abs,ceil,floor,min,max,squ,random,randInt,dist,mag,norm,map,lerp," +
       "angleMode,angleModeisDeg,deg,rad,sin,cos,tan,asin,acos,atan," +
       "rotateAngle,translate,scale,rotate,rotateShape,undoRotateShape," +
@@ -67,7 +72,7 @@ var Keplr = class {
       "linearGradient,radialGradient,rgb,rgba,hsl,hsla,hsv,hsva,hsb,hsba,lerpColor," +
       "day,month,year,hour,minute,second,millis," +
       "keyPressed,keyReleased,keyTyped,keyMatch,matchKeys," +
-      "mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut," +
+      "mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut,mouseInCanvas," +
       "runFunction,embedPack,embed," +
       "CREDITS".split(",");
 
@@ -126,6 +131,11 @@ var Keplr = class {
     };
     this.atan = function(p) {
       return this.angleModeIsDeg() ? this.deg(Math.atan(p)) : Math.atan(p);
+    };
+    this.atan2 = function(x, y) {
+      return this.angleModeIsDeg()
+        ? this.deg(Math.atan2(y, x))
+        : Math.atan2(y, x);
     };
 
     //Transform    rotateAngle,translate,scale,rotate,rotateShape,undoRotateShape,
@@ -362,8 +372,8 @@ var Keplr = class {
         g.addColorStop(i[0], i[1]);
       }
     };
-    this.radialGradient = function(x1, y1, r0, r1, colors) {
-      let g = this.ctx.createLinearGradient(x1, y1, r0, x1, y1, r1),
+    this.radialGradient = function(x, y, r0, r1, colors) {
+      let g = this.ctx.createRadialGradient(x, y, r0, x, y, r1),
         i;
       for (i of colors) {
         g.addColorStop(i[0], i[1]);
@@ -390,7 +400,7 @@ var Keplr = class {
       if (s == 0) {
         r = g = b = l;
       } else {
-        J = function H(p, q, t) {
+        J = function(p, q, t) {
           if (t < 0) t += 1;
           if (t > 1) t -= 1;
           if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -473,7 +483,7 @@ var Keplr = class {
       this.ctx.fillText(text, x, y);
     };
     this.textWidth = function(text) {
-      this.ctx.measureText(text).width;
+      return this.ctx.measureText(text).width;
     };
 
     //TIME    day,month,year,hour,minute,second,millis,
@@ -485,7 +495,7 @@ var Keplr = class {
     this.second = a => new Date().getSeconds();
     this.millis = a => this.loadTime - new Date().getTime();
 
-    //KEY    keyPressed,keyReleased,keyTyped,keyMatch,matchKeys,
+    //KEYBOARD    keyPressed,keyReleased,keyTyped,keyMatch,matchKeys,
     this.keyPressed = () => {};
     this.keyReleased = () => {};
     this.keyTyped = () => {};
@@ -498,13 +508,14 @@ var Keplr = class {
       );
     };
 
-    //MOUSE    mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut,
+    //MOUSE    mouseClicked,mousePressed,mouseReleased,mouseMoved,mouseOver,mouseOut,mouseInCanvas,
     this.mouseClicked = () => {};
     this.mousePressed = () => {};
     this.mouseReleased = () => {};
     this.mouseMoved = () => {};
     this.mouseOver = () => {};
     this.mouseOut = () => {};
+    this.mouseInCanvas = false;
 
     //EMBED    runFunction,embedPack,embed,
     this.runFunction = function(a) {
@@ -574,76 +585,80 @@ var Keplr = class {
       });
     };
   }
-  set setup(x) {
-    document.addEventListener("load", function(event) {
-      x();
-    });
-  }
   set draw(x) {
     let t = this;
-    document.addEventListener("click", function(event) {
+    this.element.addEventListener("click", function(event) {
+      t.lastTarget = event.target;
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mouseClicked(event);
     });
-    document.addEventListener("mousedown", function(event) {
+    this.element.addEventListener("mousedown", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mousePressed(event);
     });
-    document.addEventListener("mouseup", function(event) {
+    this.element.addEventListener("mouseup", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mouseReleased(event);
     });
-    document.addEventListener("mousedown", function(event) {
+    this.element.addEventListener("mousedown", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mousePressed(event);
     });
-    document.addEventListener("mousemove", function(event) {
+    this.element.addEventListener("mousemove", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mouseMoved(event);
     });
-    document.addEventListener("mouseenter", function(event) {
+    this.element.addEventListener("mouseenter", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
+      t.mouseInCanvas = true;
       t.mouseOver(event);
     });
-    document.addEventListener("mouseleave", function(event) {
+    this.element.addEventListener("mouseleave", function(event) {
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
+      t.mouseInCanvas = false;
       t.mouseOut(event);
     });
 
     document.addEventListener("keydown", function(event) {
-      t.key = event.key;
-      t.keyCode = event.keyCode;
-      t.keyCodes[event.keyCode] = true;
-      t.keyPressed(event);
+      if (t.checkTarget()) {
+        t.key = event.key;
+        t.keyCode = event.keyCode;
+        t.keyCodes[event.keyCode] = true;
+        t.keyPressed(event);
+      }
     });
     document.addEventListener("keyup", function(event) {
-      t.key = event.key;
-      t.keyCode = event.keyCode;
-      t.keyCodes[event.keyCode] = false;
-      t.keyReleased(event);
+      if (t.checkTarget()) {
+        t.key = event.key;
+        t.keyCode = event.keyCode;
+        t.keyCodes[event.keyCode] = false;
+        t.keyReleased(event);
+      }
     });
     document.addEventListener("keypress", function(event) {
-      t.key = event.key;
-      t.keyCode = event.keyCode;
-      t.keyTyped(event);
-    });
-    document.addEventListener("load", function(event) {
-      t.loadTime = new Date().getTime();
+      if (t.checkTarget()) {
+        t.key = event.key;
+        t.keyCode = event.keyCode;
+        t.keyTyped(event);
+      }
     });
     this.animate = function() {
       x();
       t.tk++;
       requestAnimationFrame(t.animate);
     };
-    if (this.toggleAnimate == true) {
-      this.animate();
+    t.loadTime = new Date().getTime();
+    t.log("loaded");
+    if (typeof t.setup == "function") t.setup();
+    if (t.toggleAnimate == true) {
+      t.animate();
     }
   }
 };
