@@ -320,7 +320,7 @@ let canvas = new Keplr(".keplr-canvas");
 
 ### EMBED
 
-| **Methods** | Types | returns |
+| **Methods** | Types | returns | Description |
 | --- | --- | --- | --- |
 | embed(embed) | String |  | Draws a Keplr Embed
 
@@ -331,5 +331,23 @@ let canvas = new Keplr(".keplr-canvas");
 | `<rect 0,0,100,100 fill="#FF0000">` | fill("#FF0000"); rect(0,0,100,100); |
 | `<image "dog",100,100>` | image("dog",100,100);
 | `<text "Hello World!",100,100 font="Arial",20 fill="blue">` | fill("blue"); font("Arial",20); text("Hello World!",100,100);
+
+### PROTOTYPE
+
+#### Array Methods
+
+| **Methods** | Types | returns | Description |
+| --- | --- | --- | --- |
+| `equals(array)` | Array | Boolean | Returns if `this` array equals `array`
+| `last(i)` | Number | Mixed | Returns the `i`th to last index (If blank, returns the last index)
+| `swap(a,b)` | Number |  | Swaps the value at index `a` with index `b`.
+
+#### String Methods
+
+| **Methods** | Types | returns | Description |
+| --- | --- | --- | --- |
+| `last(i)` | Number | Mixed | Returns the `i`th to last character (If blank, returns the last character)
+| `replaceAll(a,b)` | String, String |  | Replaces All parts of `a` with `b`.
+
 
 ## Feel free to make pull requests!
