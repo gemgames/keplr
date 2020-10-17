@@ -139,7 +139,7 @@ let canvas = new Keplr(".keplr-canvas");
 
 ## Docs
 
-### System
+### SYSTEM
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -159,7 +159,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `error(str)` | String |  | Puts an error in the console.
 | `animate()` |  |  | Starts drawing frames for animation.
 
-### Math
+### MATH
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -189,7 +189,7 @@ let canvas = new Keplr(".keplr-canvas");
 
 
 
-### Trigonometry
+### TRIGONOMETRY
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -209,7 +209,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `atan(n)` | Number | Number | Returns the arc tangent of `n`.
 | `atan2(x,y)` | Number | Number | Calculates the angle a coordinate is to the origin. **NOTE: X, then Y.**
 
-### Transform
+### TRANSFORM
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -224,7 +224,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `rotateAll(amount)` | Number |  | Rotates the canvas around the origin by `amount` .
 
 
-### Canvas CTX
+### CANVAS CTX
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -254,7 +254,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `strokeWidth(n)` OR `strokeWeight(n)` OR `lineWidth(n)` | Number |  | Future shapes will have a outline with width `n`.
 | `strokeJoin(mode)` OR `lineJoin(mode)` | String |  | Changes the mode on how lines look bent. `mode` can be "bevel", "round", or "miter". Defaults to "round".
 
-### Images
+### IMAGES
 
 | **Properties** | Type | Description
 | --- | --- | --- |
@@ -287,7 +287,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `text(str,x,y)` | String, Number, Number |  | Draws Text on the canvas.
 | `textWidth(str)` | String | Number | Returns the width of measured text by string.
 
-### Time
+### TIME
 
 | **Methods** | Types | returns | Description |
 | --- | --- | --- | --- |
@@ -317,3 +317,15 @@ let canvas = new Keplr(".keplr-canvas");
 | `mouseMoved` | Function | Called when the mouse is moved.
 | `mouseOver` | Function | Called when the mouse is over the canvas.
 | `mouseOut` | Function | Called when the mouse is out of the canvas.
+
+### EMBED
+
+| **Methods** | Types | returns |
+| --- | --- | --- | --- |
+| embed(embed) | String |  | Draws a Keplr Embed
+
+#### Keplr Embed Examples
+| Keplr Embed | JS Equivalent |
+| --- | --- |
+| `<rect 0,0,100,100>` | rect(0,0,100,100); |
+| `<rect 0,0,100,100`
