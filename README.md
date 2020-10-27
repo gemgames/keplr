@@ -10,9 +10,9 @@ Link Directly to this repository
 ```
 ## Demos
 
-(Hello World)[/docs/helloworld.html]
-(Embed)[/docs/embed.html]
-(All Shapes)[/docs/allshapes.html]
+(Hello World)[https://gemgames.github.io/keplr/docs/helloworld.html]
+(Embed)[https://gemgames.github.io/keplr/docs/embed.html]
+(All Shapes)[https://gemgames.github.io/keplr/docs/allshapes.html]
 
 ## Demo
 
