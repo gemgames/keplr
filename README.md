@@ -10,9 +10,9 @@ Link Directly to this repository
 ```
 ## Demos
 
-(Hello World)[https://gemgames.github.io/keplr/docs/helloworld.html]
-(Embed)[https://gemgames.github.io/keplr/docs/embed.html]
-(All Shapes)[https://gemgames.github.io/keplr/docs/allshapes.html]
+[Hello World](https://gemgames.github.io/keplr/docs/helloworld.html)
+[Embed](https://gemgames.github.io/keplr/docs/embed.html)
+[All Shapes](https://gemgames.github.io/keplr/docs/allshapes.html)
 
 ## Demo
 
@@ -250,7 +250,7 @@ let canvas = new Keplr(".keplr-canvas");
 | `point(x,y)` | Number, Number |  | Draws a point on the canvas at coordinate `(x,y)`.
 | `bezier(x1,y1,cx1,cy1,cx2,cy2,x2,y2)` | Number x8 |  | Draws a bezier starting at `(x1,y1)` ending at `(x2,y2)` with control points `(cx1,cy1), (cx2,cy2)`.
 | `quadBezier(x1,y1,cx,cy,x2,y2)` | Number x6 |  | Draws a quadratic bezier starting at `(x1,y1)` ending at `(x2,y2)` with a control point `(cx,cy)`.
-| `path(d)` | String |  | Draws a path using (SVG Path)[https://www.w3schools.com/graphics/svg_path.asp] Notation.
+| `path(d)` | String |  | Draws a path using [SVG Path](https://www.w3schools.com/graphics/svg_path.asp) Notation.
 | `background(col)` | String |  | Wipes the canvas clean with the color `col`.
 | `fill(col)` | String |  | Fills future shapes with color `col`.
 | `noFill()` | String |  | Future shapes will have a transparent fill area.
@@ -274,8 +274,8 @@ let canvas = new Keplr(".keplr-canvas");
 
 | **Methods** | Types | returns | Description |
 | --- | --- | --- | --- |
-| `linearGradient(x1,y1,x2,y2,colors)` | Number x4, Array of Arrays |  | Creates a linear gradient in (CanvasGradient)[https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient] form moving from `(x1,y1)` to `(x2,y2)`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
-| `radialGradient(x,y,r0,r1,colors)` | Number x4, Array of Arrays |  | Creates a radial gradient in (CanvasGradient)[https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient] form at coordinate `(x,y)` with a starting radius `r0` and ending radius `r1`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
+| `linearGradient(x1,y1,x2,y2,colors)` | Number x4, Array of Arrays |  | Creates a linear gradient in [CanvasGradient])https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient) form moving from `(x1,y1)` to `(x2,y2)`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
+| `radialGradient(x,y,r0,r1,colors)` | Number x4, Array of Arrays |  | Creates a radial gradient in [CanvasGradient](https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient) form at coordinate `(x,y)` with a starting radius `r0` and ending radius `r1`. Colors are in arrays next to their position. eg. `linearGradient(0,0,100,100,[ [0, "red"], [0.5, "yellow"], [1, "blue"] ])`.
 | `rgb(r,g,b)` | Number x3 | String | Makes a color in RGB form. `r`, `g`, and `b` are out of 255.
 | `rgba(r,g,b,a)` | Number x4 | String | Makes a color in RGBA form. `r`, `g`, `b`, and `a` are out of 255.
 | `hsl(h,s,l)` | Number x3 | String | Makes a color in HSL form. `h` is out of 360. `s` and `l` are out of 100.
