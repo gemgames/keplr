@@ -8,6 +8,11 @@ Link Directly to this repository
 ```HTML
 <script src="https://cdn.jsdelivr.net/gh/gemgames/keplr@1.0/keplr.min.js"></script>
 ```
+## Demos
+
+(Hello World)[/docs/helloworld.html]
+(Embed)[/docs/embed.html]
+(All Shapes)[/docs/allshapes.html]
 
 ## Demo
 
