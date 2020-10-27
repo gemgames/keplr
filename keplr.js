@@ -25,6 +25,9 @@ String.prototype.last = function(a) {
 String.prototype.replaceAll = function(a, b) {
   return this.replace(new RegExp(a, "g"), b);
 };
+HTMLCollection.prototype.last = function(a) {
+  return this[this.length - (a == undefined ? 1 : a)];
+};
 
 var Keplr = class {
   constructor(canvas) {
@@ -39,7 +42,7 @@ var Keplr = class {
     this.tk = 0;
     this.tab = String.fromCharCode(9);
     this.toggleAnimate = 1;
-    this.lastTarget = null;
+    this.lastTarget = { outerHTML: "a" };
     this.checkTarget = function() {
       return this.lastTarget.outerHTML.substring(1, 6) != "input";
     };
@@ -577,9 +580,13 @@ var Keplr = class {
     };
   }
   set draw(x) {
-    let t = this;
+    let t = this,
+      A = function(event) {
+        t.lastTarget = event.target;
+      };
+    document.addEventListener("mousedown", A);
+    document.addEventListener("mouseup", A);
     this.element.addEventListener("click", function(event) {
-      t.lastTarget = event.target;
       t.mouseX = event.offsetX;
       t.mouseY = event.offsetY;
       t.mouseClicked(event);
@@ -646,7 +653,6 @@ var Keplr = class {
       requestAnimationFrame(t.animate);
     };
     t.loadTime = new Date().getTime();
-    t.log("loaded");
     if (typeof t.setup == "function") t.setup();
     if (t.toggleAnimate == true) {
       t.animate();
