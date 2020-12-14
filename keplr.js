@@ -108,7 +108,7 @@ var Keplr = class {
       this.angleMode.toUpperCase().substring(0, 3) == "DEG";
     this.deg = rad => (rad * Math.PI) / 180;
     this.rad = deg => (deg / Math.PI) * 180;
-    let a = this.angleModeIsDeg,d=this.deg;
+    var a = this.angleModeIsDeg,d=this.deg;
     this.sin = function(p) {
       return a() ? Math.sin(d(p)) : Math.sin(p);
     };
@@ -128,8 +128,8 @@ var Keplr = class {
       return a() ? d(Math.atan(p)) : Math.atan(p);
     };
     this.atan2 = function(x, y) {
-      return this.angleModeIsDeg()
-        ? this.deg(Math.atan2(y, x))
+      return a()
+        ? d(Math.atan2(y, x))
         : Math.atan2(y, x);
     };
 
