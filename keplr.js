@@ -104,32 +104,31 @@ var Keplr = class {
 
     //TRIGONOMETRY    angleMode,angleModeisDeg,deg,rad,sin,cos,tan,asin,acos,atan,
     this.angleMode = "DEG";
-    this.angleModeisDeg = a =>
+    this.angleModeisDeg = this.aMID = a =>
       this.angleMode.toUpperCase().substring(0, 3) == "DEG";
     this.deg = rad => (rad * Math.PI) / 180;
     this.rad = deg => (deg / Math.PI) * 180;
-    var a = this.angleModeIsDeg,d=this.deg;
     this.sin = function(p) {
-      return a() ? Math.sin(d(p)) : Math.sin(p);
+      return this.aMID() ? Math.sin(this.deg(p)) : Math.sin(p);
     };
     this.cos = function(p) {
-      return a() ? Math.cos(d(p)) : Math.cos(p);
+      return this.aMID() ? Math.cos(this.deg(p)) : Math.cos(p);
     };
     this.tan = function(p) {
-      return a() ? Math.tan(d(p)) : Math.tan(p);
+      return this.aMID() ? Math.tan(this.deg(p)) : Math.tan(p);
     };
     this.asin = function(p) {
-      return a() ? d(Math.asin(p)) : Math.asin(p);
+      return this.aMID() ? this.deg(Math.asin(p)) : Math.asin(p);
     };
     this.acos = function(p) {
-      return a() ? d(Math.acos(p)) : Math.acos(p);
+      return this.aMID() ? this.deg(Math.acos(p)) : Math.acos(p);
     };
     this.atan = function(p) {
-      return a() ? d(Math.atan(p)) : Math.atan(p);
+      return this.aMID() ? this.deg(Math.atan(p)) : Math.atan(p);
     };
     this.atan2 = function(x, y) {
-      return a()
-        ? d(Math.atan2(y, x))
+      return this.aMID()
+        ? this.deg(Math.atan2(y, x))
         : Math.atan2(y, x);
     };
 
@@ -142,7 +141,7 @@ var Keplr = class {
       this.ctx.scale(x, y);
     };
     this.rotate = function(deg) {
-      this.rotateAngle = this.angleModeisDeg() ? this.deg(deg) : deg;
+      this.rotateAngle = this.aMID() ? this.deg(deg) : deg;
     };
     this.rotateShape = function(x, y) {
       if (this.rotateAngle == 0) return;
