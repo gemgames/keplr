@@ -113,7 +113,7 @@ var Keplr = class {
       return a() ? Math.sin(d(p)) : Math.sin(p);
     };
     this.cos = function(p) {
-      return a() ? Math.sin(d(p)) : Math.sin(p);
+      return a() ? Math.cos(d(p)) : Math.cos(p);
     };
     this.tan = function(p) {
       return a() ? Math.tan(d(p)) : Math.tan(p);
