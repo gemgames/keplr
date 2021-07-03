@@ -1,4 +1,4 @@
-/* Keplr 1.0 */
+/* Keplr 1.4 */
 Array.prototype.equals = function(array) {
   if (!array) return false;
   if (this.length != array.length) return false;
@@ -207,6 +207,13 @@ var Keplr = class {
         this.ctx.lineTo(x4, y4);
         this.ctx.lineTo(x1, y1);
         this.ctx.closePath();
+      },
+      shape: (X,Y)=>{
+         this.ctx.moveTo(X[0], Y[0]);
+          for(let i=0;i<X.length-1;i++){
+              this.ctx.lineTo(X[i+1], Y[i+1]);
+          }
+          this.ctx.lineTo(X[0],Y[0]);
       }
     };
     this.rect = function(x, y, w, h) {
@@ -268,6 +275,23 @@ var Keplr = class {
       this.drawPath.quad(x1, y1, x2, y2, x3, y3, x4, y4);
       this.fillPath();
       this.drawPath.quad(x1, y1, x2, y2, x3, y3, x4, y4);
+      this.closePath(x, y);
+    };
+    this.shape = function(X,Y) {
+      let x = this.lerp(
+        this.min(...X),
+        this.max(...X),
+        0.5
+      );
+      let y = this.lerp(
+        this.min(...Y),
+        this.max(...Y),
+        0.5
+      );
+      this.beginPath(x, y);
+      this.drawPath.shape(X,Y);
+      this.fillPath();
+      this.drawPath.shape(X,Y);
       this.closePath(x, y);
     };
     this.point = function(x, y) {
@@ -378,8 +402,7 @@ var Keplr = class {
       return "#" + e(r) + e(g) + e(b);
     };
     this.rgba = function(r, g, b, a) {
-      let e = p => p.toString(16);
-      return "#" + e(r) + e(g) + e(b) + e(a);
+      return this.rgb(r,g,b) + a.toString(16).padStart(2,"0");
     };
     this.hsl = function(H, S, L) {
       let h = H / 360,
@@ -413,7 +436,7 @@ var Keplr = class {
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
     };
     this.hsla = function(h, s, l, a) {
-      return "#" + this.hsl(h, s, l) + (a * 255).toString(16);
+      return this.hsl(h, s, l) + (a * 255).toString(16).padStart(2, "0");;
     };
     this.hsv = this.hsb = function(H, S, V) {
       var r, g, b, i, f, p, q, t;
@@ -452,7 +475,7 @@ var Keplr = class {
       return this.rgb(R(r * 255), R(g * 255), R(b * 255));
     };
     this.hsva = this.hsba = function(h, s, v, a) {
-      return "#" + this.hsv(h, s, v) + (a * 255).toString(16);
+      return this.hsv(h, s, v) + (a * 255).toString(16).padStart(2, "0");;
     };
     this.lerpColor = function(c1, c2) {
       let a = c1.split(""),
